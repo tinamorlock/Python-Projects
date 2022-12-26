@@ -2,13 +2,15 @@
 #
 # Python Ver:   3.11.1
 #
-# Author:       Tina Morlock
+# Author:       Tina Morlock, based on Daniel Christie's phonebook app
 #
 # Purpose:      Student tracking app to submit the following information:
 #               first name, last name, ph #, email, current course, submit button,
 #               delete button, and can display the list of students.
 #
-# Tested OS:  This code was written and tested to work with macOS Monterey.
+# Tested OS:  This code was written and tested to work with Windows.
+
+# This file runs/controls the parent window for the GUI and sets up some basic design parameters for the main window.
 
 
 from tkinter import *
@@ -38,9 +40,7 @@ class ParentWindow(Frame):
         self.master.title("Student Tracking")
         self.master.configure(bg="lightgray")
 
-        # may or may not work on Mac? (will come back to this later)
-        # but this is supposed to verify the user wants to quit the app,
-        # in case they accidentally clicked on the X
+        # verifies user wants to quit. will confirm. 
 
         self.master.protocol("WM_DELETE_WINDOW", lambda: student_tracking_func.ask_quit(self))
         arg = self.master
@@ -63,11 +63,6 @@ class ParentWindow(Frame):
         helpmenu.add_separator()
         helpmenu.add_command(label="About This Student Tracker")
         menubar.add_cascade(label="Help", menu=helpmenu)
-        """
-            Finally, we apply the config method of the widget to display the menu
-            From here we could also pass in additional aprams for additional 
-            functionality or appearances such as a border width.
-        """
         self.master.config(menu=menubar, borderwidth='1')
 
 

@@ -1,16 +1,19 @@
 #
 # Python Ver:   3.11.1
 #
-# Author:       Daniel A. Christie
+# Author:       Tina Morlock, based on Daniel Christie's phonebook app
 #
 # Purpose:      Student tracking app to submit the following information:
 #               first name, last name, ph #, email, current course, submit button,
 #               delete button, and can display the list of students.
 #
-# Tested OS:  This code was written and tested to work with macOS Monterey.
+# Tested OS:  This code was written and tested to work with Windows.
+
+# This file includes all the functions the GUI needs to run in order to make the student tracker work.
 
 import os
 from tkinter import *
+from tkinter import messagebox
 import tkinter as tk
 import sqlite3
 
@@ -21,10 +24,14 @@ import student_tracking_gui
 
 
 def center_window(self, w, h):
+
     # get user's screen width and height
+
     screen_width = self.master.winfo_screenwidth()
     screen_height = self.master.winfo_screenheight()
+
     # calculate x and y coordinates to paint the app centered on the user's screen
+
     x = int((screen_width/2) - (w/2))
     y = int((screen_height/2) - (h/2))
     centerGeo = self.master.geometry('{}x{}+{}+{}'.format(w, h, x, y))
@@ -32,16 +39,22 @@ def center_window(self, w, h):
 
 
 # catch if the user's clicks on the windows upper-right 'X' to ensure they want to close
+# originally wouldn't run without importing messagebox specifically
 
 def ask_quit(self):
     if messagebox.askokcancel("Exit program", "Okay to exit application?"):
+
         # This closes app
+
         self.master.destroy()
         os._exit(0)
 
 
 #=========================================================
 def create_db(self):
+
+    # create the student tracking database here if it doesn't already exist
+
     conn = sqlite3.connect('student_tracking.db')
     with conn:
         cur = conn.cursor()
@@ -54,11 +67,11 @@ def create_db(self):
             student_email TEXT, \
             student_current_course TEXT \
             );")
-        # You must commit() to save changes & close the database connection
         conn.commit()
     conn.close()
     first_run(self)
 
+# function adds some dummy info so there is something already in the database when the user first runs it
 
 def first_run(self):
     conn = sqlite3.connect('student_tracking.db')
@@ -70,6 +83,7 @@ def first_run(self):
             conn.commit()
     conn.close()
 
+# counting how many records exist in the student tracker table
 
 def count_records(cur):
     count = ""
@@ -77,9 +91,9 @@ def count_records(cur):
     count = cur.fetchone()[0]
     return cur,count
   
+# when the user selects a student, it displays their info on the screen
 
 def onSelect(self,event):
-    # calling the event is the self.lstList1 widget
     varList = event.widget
     select = varList.curselection()[0]
     value = varList.get(select)
@@ -101,6 +115,7 @@ def onSelect(self,event):
             self.txt_course.delete(0, END)
             self.txt_course.insert(0, data[4])
 
+# adding an entry into the database
 
 def addToList(self):
     var_fname = self.txt_fname.get()
@@ -114,14 +129,14 @@ def addToList(self):
     print("var_fullname: {}".format(var_fullname))
     var_phone = self.txt_phone.get().strip()
     var_email = self.txt_email.get().strip()
-    var_course = self.txt_course.get().strip()
-    if not "@" or not "." in var_email: # will use this soon
+    if not "@" or not "." in var_email:
         print("Incorrect email format!!!")
+    var_course = self.txt_course.get().strip()
     if (len(var_fname) > 0) and (len(var_lname) > 0) and (len(var_phone) > 0) and(len(var_email) > 0): # enforce the user to provide both names
         conn = sqlite3.connect('student_tracking.db')
         with conn:
             cursor = conn.cursor()
-            # Check the database for existance of the fullname, if so we will alert user and disregard request
+            # Check the database for existence of the fullname, if so we will alert user and disregard request
             cursor.execute("""SELECT COUNT(student_full_name) FROM tbl_student_tracker WHERE student_full_name = '{}'""".format(var_fullname))#,(var_fullname))
             count = cursor.fetchone()[0]
             chkName = count
@@ -129,15 +144,18 @@ def addToList(self):
                 print("chkName: {}".format(chkName))
                 cursor.execute("""INSERT INTO tbl_student_tracker (student_first,student_last,student_full_name,student_phone,student_email,student_current_course) VALUES (?,?,?,?,?,?)""",(var_fname,var_lname,var_fullname,var_phone,var_email,var_course))
                 self.lstList1.insert(END, var_fullname) # update listbox with the new fullname
-                onClear(self) # call the function to clear all of the textboxes
+                onClear(self) 
             else:
                 messagebox.showerror("Name Error","'{}' already exists in the database! Please choose a different name.".format(var_fullname))
-                onClear(self) # call the function to clear all of the textboxes
+                onClear(self) 
         conn.commit()
         conn.close()
     else:
         messagebox.showerror("Missing Text Error","Please ensure that there is data in all four fields.")
-        
+
+  # have verified the delete button works like it should
+  # this will delete a record, as long as it's not the last one there
+  # also verifies if the user really means to delete user      
 
 def onDelete(self):
     var_select = self.lstList1.get(self.lstList1.curselection()) # Listbox's selected value
@@ -162,6 +180,7 @@ def onDelete(self):
             confirm = messagebox.showerror("Last Record Error", "({}) is the last record in the database and cannot be deleted at this time. \n\nPlease add another record first before you can delete ({}).".format(var_select,var_select))
     conn.close()
 
+# when deleted, we're going to refresh what's displayed in the GUI
 
 def onDeleted(self):
     # clear the text in these textboxes
@@ -187,7 +206,9 @@ def onClear(self):
     
 
 def onRefresh(self):
-    # Populate the listbox, coinciding with the database
+
+    # puts the info from the database on the GUI
+   
     self.lstList1.delete(0,END)
     conn = sqlite3.connect('student_tracking.db')
     with conn:
@@ -211,10 +232,11 @@ def onUpdate(self):
     except:
         messagebox.showinfo("Missing selection","No name was selected from the list box. \nCancelling the Update request.")
         return
-    # The user will only be alowed to update changes for phone and emails.
+    # The user will only be alowed to update changes for phone, emails, and the current course.
     # For name changes, the user will need to delete the entire record and start over.
     var_phone = self.txt_phone.get().strip() # normalize the data to maintain database integrity
     var_email = self.txt_email.get().strip()
+    var_course = self.txt_course.get().strip()
     if (len(var_phone) > 0) and (len(var_email) > 0): # ensure that there is data present
         conn = sqlite3.connect('student_tracking.db')
         with conn:
@@ -253,4 +275,4 @@ def onUpdate(self):
 
 
 if __name__ == "__main__":
-    pass
+    pass                        # file will not run on its own.
