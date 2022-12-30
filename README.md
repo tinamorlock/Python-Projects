@@ -15,3 +15,5 @@ This program runs in a GUI designed with tkinter. It allows the user to update, 
 This program runs in a GUI designed with tkinter. It allows the user to select a source directory and a destination directory. Then it checks the source directory to see if the files there have been modified in the past 24 hours. If so, it transfers them to the destination directory.
 ### Web Page Generator
 This program runs in a GUI designed with tkinter. It allows the user to click to either display a default HTML file, or they can create a basic web page with custom text.
+### Django University
+Basic Django admin site with two databases: one for classes and one for campuses. Uses SQLite3.
