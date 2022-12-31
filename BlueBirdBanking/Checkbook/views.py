@@ -31,7 +31,7 @@ def create_account(request):
 
 # this function renders the Balance page when requested
 
-def balance(request):
+def balance(request, pk):
     account = get_object_or_404(Account, pk=pk)     # retrieve using primary key
     transactions = Transaction.Transactions.filter(account=pk)      # retrieve all of the accounts transactions
     current_total = account.initial_deposit     # creates account total variable, starting with initial deposit
@@ -42,7 +42,7 @@ def balance(request):
             table_contents.update({t: current_total})       # adds transaction and total
         else:
             current_total -= t.amount   # withdrawal subtracts from acct
-            table_contents.upate({t: current_total})     # transaction and total go in dictionary
+            table_contents.update({t: current_total})     # transaction and total go in dictionary
     # pass account, account total balance, and transaction info to template
     content = {'account': account, 'table_contents': table_contents, 'balance': current_total}
     return render(request, 'checkbook/BalanceSheet.html', content)
