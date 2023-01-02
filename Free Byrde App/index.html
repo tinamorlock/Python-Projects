@@ -1,0 +1,31 @@
+
+
+
+<!-- this will go in templates for fb app-->
+
+<body id="body">
+
+    <div class="byrde-nav">
+        <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Academy</a></li>
+            <li><a href="#">Coaching</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Case Studies</a></li>
+        </ul>
+    </div>
+
+    <div class="app-container">
+        {% block content %}{% endblock %}
+        <br><br>
+    </div>
+
+    <section id="byrde-footer">
+        <p id="footer-right"><a href="#">Terms</a>|<a href="#">Privacy</a></p>
+        <p id="footer-left">&copy;2023 — FreeByrde App</p>
+    </section>
+</body>
+
+<!-- end of templates snippet for app -->
