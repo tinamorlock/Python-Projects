@@ -1,24 +1,36 @@
+<!-- this will go in templates for fb app
+{% load static %}-->
 
+<!DOCTYPE html>
 
+<html lang="en">
 
-<!-- this will go in templates for fb app-->
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="byrde.css">            <!-- update with static info-->
+        <script src="https://kit.fontawesome.com/63c7ba5d25.js" crossorigin="anonymous"></script> <!-- for font awesome -->
+
+		<title><!-- {% block title%}{% endblock %}--></title>
+	</head>
 
 <body id="body">
 
-    <div class="byrde-nav">
-        <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Pricing</a></li>
-            <li><a href="#">Academy</a></li>
-            <li><a href="#">Coaching</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Case Studies</a></li>
+    <div class="byrde-nav hide-nav">
+        <ul class="byrde-nav">
+            <li class="nav-item"><a><img class="mini-logo" src="byrde-icon.jpg"></a></li>
+            <li class="nav-item nav-border"><a class="nav-item" href="#">About</a></li>
+            <li class="nav-item nav-border"><a class="nav-item" href="#">Features</a></li>
+            <li class="nav-item nav-border"><a class="nav-item" href="#">Pricing</a></li>
+            <li class="nav-item nav-border"><a class="nav-item" href="#">Academy</a></li>
+            <li class="nav-item nav-border"><a class="nav-item" href="#">Coaching</a></li>
+            <li class="nav-item nav-border"><a class="nav-item" href="#">Blog</a></li>
+            <li class="nav-item"><a class="nav-item" href="#">Case Studies</a></li>
         </ul>
     </div>
 
     <div class="app-container">
-        {% block content %}{% endblock %}
+        <!-- {% block content %}{% endblock %}-->
         <br><br>
     </div>
 
